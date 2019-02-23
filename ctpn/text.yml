@@ -1,0 +1,39 @@
+EXP_DIR: ctpn_end2end
+LOG_DIR: ctpn
+IS_MULTISCALE: False
+NET_NAME: VGGnet
+ANCHOR_SCALES: [16]
+ANCHOR_NUM: 6
+NCLASSES: 2
+USE_GPU_NMS: True
+TRAIN:
+  restore: 0
+  max_steps: 270000
+  SOLVER: Adam
+  OHEM: False  # 该参数没有用到
+  RPN_BATCHSIZE: 512  # 这是有rpn的网络用到的参数，rpn也就是说框是网络自动生成的
+  BATCH_SIZE: 300  # 这是没有rpn网络用到的参数，
+  LOG_IMAGE_ITERS: 100 # 没有用到
+  DISPLAY: 500 # 训练多少iter就打印一次loss信息
+  SNAPSHOT_ITERS: 5000 # 训练多少iter就保存一下
+  HAS_RPN: True # 是否用rpn网络
+  LEARNING_RATE: 0.000001 # 学习老板
+  MOMENTUM: 0.9 # 动量学习方法的参数
+  GAMMA: 0.1 # 训练STEPSIZE个ietr以后学习率做乘法的参数
+  STEPSIZE: 30000 # 见上一行
+  IMS_PER_BATCH: 1 # 每个batch用几张图片，这份代码只允许1张
+  BBOX_NORMALIZE_TARGETS_PRECOMPUTED: True # 框的归一化？
+  RPN_POSITIVE_OVERLAP: 0.7 # rpn正样本overlap阈值
+  PROPOSAL_METHOD: gt # 提取框 的方法，ss，本项目没有用到此参数
+  BG_THRESH_LO: 0.0 # 有rpn网络的本项目没有用到
+  PRECLUDE_HARD_SAMPLES: True # 难样本，本项目目前没有用到，之后可能作为改进的点
+  BBOX_INSIDE_WEIGHTS: [0, 1, 0, 1] # 改成side-refinement以后不再使用
+  RPN_BBOX_INSIDE_WEIGHTS: [0, 1, 0, 1] # 同上
+  RPN_POSITIVE_WEIGHT: -1.0 # 同上
+  FG_FRACTION: 0.3 # 没有rpn网络的情况下使用的参数，有rpn是使用的是__C.TRAIN.RPN_FG_FRACTION = 0.6
+  WEIGHT_DECAY: 0.0005 # 参数权重
+TEST:
+  HAS_RPN: True
+  DETECT_MODE: H
+  # checkpoints_path: checkpoints/
+  checkpoints_path: output/ctpn_end2end/voc_2007_trainval
